@@ -636,8 +636,11 @@ function tapas()
 function eat()
 {
     if [ "$OUT" ] ; then
+        REALDATE=`sed -n -r 's/ro.build.version.incremental=//p' $OUT/system/build.prop`
         MODVERSION=`sed -n -e'/ro\.modversion/s/^.*CyanogenMod-//p' $OUT/system/build.prop`
-        ZIPFILE=update-cm-$MODVERSION-signed.zip
+        #MODVERSION=`echo $MODVERSION | sed -r 's/[0-9]{8}/'$REALDATE'/'`
+        #ZIPFILE=update-cm-$MODVERSION-signed.zip
+        ZIPFILE=cm$MODVERSION.zip
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
             echo "Nothing to eat"
@@ -659,9 +662,9 @@ function eat()
 EOF
             if adb push /tmp/command /cache/recovery/ ; then
                 echo "Rebooting into recovery for installation"
-                adb reboot recovery
-                # alternative way :
-                # adb shell "sync && reboot recovery && exit"
+                # adb reboot recovery
+                # alternative way for bootmenu compat :
+                adb shell "sync && reboot recovery && exit"
             fi
             rm /tmp/command
         fi
