@@ -1484,6 +1484,11 @@ function reposync() {
             ;;
     esac
 }
+
+function repogc() {
+    repo forall -c "git gc"
+}
+
 # Force JAVA_HOME to point to java 1.6 if it isn't already set
 function set_java_home() {
     if [ ! "$JAVA_HOME" ]; then
