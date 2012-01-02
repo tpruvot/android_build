@@ -516,6 +516,9 @@ NOTICE-TARGET-%: ;
 
 else # ONE_SHOT_MAKEFILE
 
+
+NOTICE-TARGET-%: ;
+
 #
 # Include all of the makefiles in the system
 #
