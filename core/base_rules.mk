@@ -455,6 +455,7 @@ $(LOCAL_INTERMEDIATE_TARGETS) : PRIVATE_MODULE:= $(LOCAL_MODULE)
 .PHONY: $(LOCAL_MODULE)
 $(LOCAL_MODULE): $(LOCAL_BUILT_MODULE) $(LOCAL_INSTALLED_MODULE)
 
+
 ###########################################################
 ## Module "Install:" output color (green for gingerbread)
 ###########################################################
