@@ -26,11 +26,12 @@ and fails if they do.
 
 import cStringIO
 import getopt
-import md5
 import struct
 import sys
 
 import event_log_tags
+
+from hashlib import md5
 
 errors = []
 warnings = []
