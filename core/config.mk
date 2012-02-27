@@ -45,17 +45,6 @@ SRC_DROIDDOC_DIR := $(TOPDIR)build/tools/droiddoc
 # Various mappings to avoid hard-coding paths all over the place
 include $(BUILD_SYSTEM)/pathmap.mk
 
-# #########################################################
-# Build color for the prefixes
-# #########################################################
-
-# Target prefix (yellow)
-CL_PFX="\033[33m"
-
-# Must be used at end of line to reset color terminal
-CL_RST="\033[0m"
-
-
 # ###############################################################
 # Build system internal files
 # ###############################################################
