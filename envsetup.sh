@@ -614,9 +614,14 @@ function eat()
     if [ "$OUT" ] ; then
         MODVERSION=`sed -n -e'/ro\.cm\.version/s/.*=//p' $OUT/system/build.prop`
         ZIPFILE=update-cm-$MODVERSION-signed.zip
+
+        MODVERSION=`sed -n -e'/ro\.modversion/s/^.*=//p' $OUT/system/build.prop`
+        MODVERSION=`echo $MODVERSION | sed 's/CyanogenMod-//'`
+        ZIPFILE=CM$MODVERSION.zip
+
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
-            echo "Nothing to eat"
+            echo "Nothing to eat, $ZIPFILE not found"
             return 1
         fi
         adb start-server # Prevent unexpected starting server message from adb get-state in the next line
@@ -636,6 +641,8 @@ EOF
             if adb push /tmp/command /cache/recovery/ ; then
                 echo "Rebooting into recovery for installation"
                 adb reboot recovery
+                # alternative way for bootmenu compat :
+                # adb shell "sync && reboot recovery && exit"
             fi
             rm /tmp/command
         fi
