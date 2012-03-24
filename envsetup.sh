@@ -658,10 +658,10 @@ function eat()
         MODVERSION=`sed -n -e'/ro\.modversion/s/^.*CyanogenMod-//p' $OUT/system/build.prop`
         #MODVERSION=`echo $MODVERSION | sed -r 's/[0-9]{8}/'$REALDATE'/'`
         #ZIPFILE=update-cm-$MODVERSION-signed.zip
-        ZIPFILE=cm$MODVERSION.zip
+        ZIPFILE=CM$MODVERSION.zip
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
-            echo "Nothing to eat"
+            echo "Nothing to eat, $ZIPPATH not found"
             return 1
         fi
         adb start-server # Prevent unexpected starting server message from adb get-state in the next line
