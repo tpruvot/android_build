@@ -740,7 +740,7 @@ endef
 
 define transform-variables
 @mkdir -p $(dir $@)
-@echo "Sed: $(if $(PRIVATE_MODULE),$(PRIVATE_MODULE),$@) <= $<"
+@echo  -e ${CL_PFX}"Sed:"${CL_RST}" $(if $(PRIVATE_MODULE),$(PRIVATE_MODULE),$@) <= $<"
 $(hide) sed $(foreach var,$(REPLACE_VARS),-e "s/{{$(var)}}/$(subst /,\/,$(PWD)/$($(var)))/g") $< >$@
 $(hide) if [ "$(suffix $@)" = ".sh" ]; then chmod a+rx $@; fi
 endef
@@ -763,7 +763,7 @@ endef
 
 define transform-l-to-cpp
 @mkdir -p $(dir $@)
-@echo "Lex: $(PRIVATE_MODULE) <= $<"
+@echo  -e ${CL_PFX}"Lex:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(hide) $(LEX) -o$@ $<
 endef
 
@@ -777,7 +777,7 @@ endef
 
 define transform-y-to-cpp
 @mkdir -p $(dir $@)
-@echo "Yacc: $(PRIVATE_MODULE) <= $<"
+@echo  -e ${CL_PFX}"Yacc:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(YACC) $(PRIVATE_YACCFLAGS) -o $@ $<
 touch $(@:$1=$(YACC_HEADER_SUFFIX))
 echo '#ifndef '$(@F:$1=_h) > $(@:$1=.h)
@@ -792,7 +792,7 @@ endef
 ###########################################################
 
 define transform-renderscripts-to-java-and-bc
-@echo "RenderScript: $(PRIVATE_MODULE) <= $(PRIVATE_RS_SOURCE_FILES)"
+@echo -e ${CL_PFX}"RenderScript:"${CL_RST}" $(PRIVATE_MODULE) <= $(PRIVATE_RS_SOURCE_FILES)"
 $(hide) rm -rf $(PRIVATE_RS_OUTPUT_DIR)
 $(hide) mkdir -p $(PRIVATE_RS_OUTPUT_DIR)/res/raw
 $(hide) mkdir -p $(PRIVATE_RS_OUTPUT_DIR)/src
@@ -817,7 +817,7 @@ endef
 
 define transform-aidl-to-java
 @mkdir -p $(dir $@)
-@echo "Aidl: $(PRIVATE_MODULE) <= $<"
+@echo  -e ${CL_PFX}"Aidl:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(hide) $(AIDL) -d$(patsubst %.java,%.P,$@) $(PRIVATE_AIDL_FLAGS) $< $@
 endef
 #$(AIDL) $(PRIVATE_AIDL_FLAGS) $< - | indent -nut -br -npcs -l1000 > $@
@@ -829,7 +829,7 @@ endef
 
 define transform-logtags-to-java
 @mkdir -p $(dir $@)
-@echo "logtags: $@ <= $<"
+@echo  -e ${CL_PFX}"logtags:"${CL_RST}" $@ <= $<"
 $(hide) $(JAVATAGS) -o $@ $^
 endef
 
@@ -840,7 +840,7 @@ endef
 
 define transform-proto-to-java
 @mkdir -p $(dir $@)
-@echo "Protoc: $@ <= $(PRIVATE_PROTO_SRC_FILES)"
+@echo  -e ${CL_PFX}"Protoc:"${CL_RST}" $@ <= $(PRIVATE_PROTO_SRC_FILES)"
 @rm -rf $(PRIVATE_PROTO_JAVA_OUTPUT_DIR)
 @mkdir -p $(PRIVATE_PROTO_JAVA_OUTPUT_DIR)
 $(hide) for f in $(PRIVATE_PROTO_SRC_FILES); do \
@@ -858,7 +858,7 @@ endef
 ######################################################################
 define transform-proto-to-cc
 @mkdir -p $(dir $@)
-@echo "Protoc: $@ <= $<"
+@echo -e ${CL_PFX}"Protoc:"${CL_RST}" $@ <= $<"
 $(hide) $(PROTOC) \
 	$(addprefix --proto_path=, $(PRIVATE_PROTO_INCLUDES)) \
 	$(PRIVATE_PROTOC_FLAGS) \
@@ -1013,7 +1013,7 @@ $(call transform-host-c-or-s-to-o-no-deps, )
 endef
 
 define transform-host-s-to-o-no-deps
-@echo "host asm: $(PRIVATE_MODULE) <= $<"
+@echo -e ${CL_PFX}"host asm:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(call transform-host-c-or-s-to-o-no-deps, $(PRIVATE_ASFLAGS))
 endef
 
@@ -1032,7 +1032,7 @@ endef
 ###########################################################
 
 define transform-host-m-to-o-no-deps
-@echo "host ObjC: $(PRIVATE_MODULE) <= $<"
+@echo -e ${CL_PFX}"host ObjC:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(call transform-host-c-or-s-to-o-no-deps)
 endef
 
@@ -1065,7 +1065,7 @@ endef
 
 # $(1): the full path of the source static library.
 define _extract-and-include-single-target-whole-static-lib
-@echo "preparing StaticLib: $(PRIVATE_MODULE) [including $(1)]"
+@echo -e ${CL_PFX}"preparing StaticLib:"${CL_RST}" $(PRIVATE_MODULE) [including $(1)]"
 $(hide) ldir=$(PRIVATE_INTERMEDIATES_DIR)/WHOLE/$(basename $(notdir $(1)))_objs;\
     rm -rf $$ldir; \
     mkdir -p $$ldir; \
@@ -1089,7 +1089,7 @@ define transform-o-to-static-lib
 @mkdir -p $(dir $@)
 @rm -f $@
 $(extract-and-include-target-whole-static-libs)
-@echo "target StaticLib: $(PRIVATE_MODULE) ($@)"
+@echo -e ${CL_PFX}"target StaticLib:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 $(call split-long-arguments,$(TARGET_AR) $(TARGET_GLOBAL_ARFLAGS) $(PRIVATE_ARFLAGS) $@,$(filter %.o, $^))
 endef
 
@@ -1123,7 +1123,7 @@ define transform-host-o-to-static-lib
 @mkdir -p $(dir $@)
 @rm -f $@
 $(extract-and-include-host-whole-static-libs)
-@echo "host StaticLib: $(PRIVATE_MODULE) ($@)"
+@echo -e ${CL_PFX}"host StaticLib:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 $(call split-long-arguments,$(HOST_AR) $(HOST_GLOBAL_ARFLAGS) $(PRIVATE_ARFLAGS) $@,$(filter %.o, $^))
 endef
 
@@ -1160,13 +1160,13 @@ endif
 
 define transform-host-o-to-shared-lib
 @mkdir -p $(dir $@)
-@echo "host SharedLib: $(PRIVATE_MODULE) ($@)"
+@echo -e ${CL_PFX}"host SharedLib:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 $(transform-host-o-to-shared-lib-inner)
 endef
 
 define transform-host-o-to-package
 @mkdir -p $(dir $@)
-@echo "host Package: $(PRIVATE_MODULE) ($@)"
+@echo -e ${CL_PFX}"host Package:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 $(transform-host-o-to-shared-lib-inner)
 endef
 
@@ -1210,13 +1210,13 @@ endif
 
 define transform-o-to-shared-lib
 @mkdir -p $(dir $@)
-@echo "target SharedLib: $(PRIVATE_MODULE) ($@)"
+@echo -e ${CL_PFX}"target SharedLib:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 $(transform-o-to-shared-lib-inner)
 endef
 
 define transform-o-to-package
 @mkdir -p $(dir $@)
-@echo "target Package: $(PRIVATE_MODULE) ($@)"
+@echo -e ${CL_PFX}"target Package:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 $(transform-o-to-shared-lib-inner)
 endef
 
@@ -1522,7 +1522,7 @@ endef
 #      only core.jar and framework.jar need a heap this big.
 # Avoid the memory arguments on Windows, dx fails to load for some reason with them.
 define transform-classes.jar-to-dex
-@echo "target Dex: $(PRIVATE_MODULE)"
+@echo -e ${CL_PFX}"target Dex:"${CL_RST}" $(PRIVATE_MODULE)"
 @mkdir -p $(dir $@)
 $(hide) $(DX) \
     $(if $(findstring windows,$(HOST_OS)),,-JXms16M -JXmx1536M) \
