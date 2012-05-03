@@ -40,11 +40,11 @@ ifeq "$(wildcard $(KERNEL_SRC) )" ""
         $(warning * No kernel source found, and no fallback prebuilt defined.   *)
         $(warning * Please make sure your device is properly configured to      *)
         $(warning * download the kernel repository to $(KERNEL_SRC))
-        $(warning * and add the TARGET_KERNEL_CONFIG variable to AndroidBoard.mk*)
+        $(warning * and add the TARGET_KERNEL_CONFIG variable to BoardConfig.mk *)
         $(warning *                                                             *)
         $(warning * As an alternative, define the TARGET_PREBUILT_KERNEL        *)
         $(warning * variable with the path to the prebuilt binary kernel image  *)
-        $(warning * in your AndroidBoard.mk file                                *)
+        $(warning * in your BoardConfig.mk file                                 *)
         $(warning *                                                             *)
         $(warning ***************************************************************)
         $(error "NO KERNEL")
@@ -54,7 +54,7 @@ else
         $(warning **********************************************************)
         $(warning * Kernel source found, but no configuration was defined  *)
         $(warning * Please add the TARGET_KERNEL_CONFIG variable to your   *)
-        $(warning * AndroidBoard.mk file                                   *)
+        $(warning * BoardConfig.mk file                                    *)
         $(warning **********************************************************)
         $(error "NO KERNEL CONFIG")
     else
@@ -96,13 +96,9 @@ ifeq ($(TARGET_ARCH),arm)
       ccache := $(ANDROID_BUILD_TOP)/prebuilt/$(HOST_PREBUILT_TAG)/ccache/ccache
       # Check that the executable is here.
       ccache := $(strip $(wildcard $(ccache)))
-      ifdef ccache
-        ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ARM_EABI_TOOLCHAIN)/arm-eabi-"
-        ccache = 
-      else
-        ARM_CROSS_COMPILE:=CROSS_COMPILE=$(ARM_EABI_TOOLCHAIN)/arm-eabi-
-      endif
     endif
+    ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ARM_EABI_TOOLCHAIN)/arm-eabi-"
+    ccache = 
 endif
 
 ifeq ($(TARGET_KERNEL_MODULES),)
