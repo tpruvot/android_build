@@ -612,13 +612,9 @@ function tapas()
 function eat()
 {
     if [ "$OUT" ] ; then
-        MODVERSION=`sed -n -e'/ro\.cm\.version/s/.*=//p' $OUT/system/build.prop`
-        ZIPFILE=update-cm-$MODVERSION-signed.zip
-
-        MODVERSION=`sed -n -e'/ro\.modversion/s/^.*=//p' $OUT/system/build.prop`
+        MODVERSION=`sed -n -e'/ro\.modversion/s/.*=//p' $OUT/system/build.prop`
         MODVERSION=`echo $MODVERSION | sed 's/CyanogenMod-//'`
         ZIPFILE=CM$MODVERSION.zip
-
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
             echo "Nothing to eat, $ZIPFILE not found"
