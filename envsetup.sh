@@ -654,10 +654,7 @@ function tapas()
 function eat()
 {
     if [ "$OUT" ] ; then
-        REALDATE=`sed -n -r 's/ro.build.version.incremental=//p' $OUT/system/build.prop`
         MODVERSION=`sed -n -e'/ro\.modversion/s/^.*CyanogenMod-//p' $OUT/system/build.prop`
-        #MODVERSION=`echo $MODVERSION | sed -r 's/[0-9]{8}/'$REALDATE'/'`
-        #ZIPFILE=update-cm-$MODVERSION-signed.zip
         ZIPFILE=CM$MODVERSION.zip
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
