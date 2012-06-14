@@ -1196,6 +1196,9 @@ function makerecipe() {
     echo "No branch name provided."
     return 1
   fi
+  cd .repo
+  mv local_manifest.xml local_manifest.xml.bak
+  cd ..
   cd android
   sed -i s/'default revision=.*'/'default revision="refs\/heads\/'$1'"'/ default.xml
   git commit -a -m "$1"
@@ -1210,6 +1213,10 @@ function makerecipe() {
     git push cmremote HEAD:refs/heads/'$1'
   fi
   '
+
+  cd .repo
+  mv local_manifest.xml.bak local_manifest.xml
+  cd ..
 }
 
 function cmgerrit() {
