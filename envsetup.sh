@@ -643,11 +643,12 @@ function tapas()
 function eat()
 {
     if [ "$OUT" ] ; then
-        MODVERSION=`sed -n -e'/ro\.cm\.version/s/.*=//p' $OUT/system/build.prop`
-        ZIPFILE=cm-$MODVERSION.zip
+        MODVERSION=`sed -n -e'/ro\.modversion/s/.*=//p' $OUT/system/build.prop`
+        MODVERSION=`echo $MODVERSION | sed -r 's/CyanogenMod-//'`
+        ZIPFILE=CM$MODVERSION.zip
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
-            echo "Nothing to eat"
+            echo "Nothing to eat, $ZIPFILE not found"
             return 1
         fi
         adb start-server # Prevent unexpected starting server message from adb get-state in the next line
@@ -660,7 +661,8 @@ function eat()
             echo "Device Found.."
         fi
         echo "Pushing $ZIPFILE to device"
-        if adb push $ZIPPATH /storage/sdcard0/ ; then
+#        if adb push $ZIPPATH /storage/sdcard0/ ; then
+        if adb push $ZIPPATH /mnt/sdcard/ ; then
             cat << EOF > /tmp/command
 --update_package=/sdcard/$ZIPFILE
 EOF
