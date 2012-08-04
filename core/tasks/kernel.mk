@@ -34,14 +34,14 @@ ifeq "$(wildcard $(KERNEL_SRC) )" ""
     endif
 
     ifneq ($(HAS_PREBUILT_KERNEL),)
-        $(warning ***************************************************************)
-        $(warning * Using prebuilt kernel binary instead of source              *)
-        $(warning * THIS IS DEPRECATED, AND WILL BE DISCONTINUED                *)
-        $(warning * Please configure your device to download the kernel         *)
-        $(warning * source repository to $(KERNEL_SRC))
-        $(warning * See http://wiki.cyanogenmod.com/wiki/Integrated_kernel_building)
-        $(warning * for more information                                        *)
-        $(warning ***************************************************************)
+        # $(warning ***************************************************************)
+        # $(warning * Using prebuilt kernel binary instead of source              *)
+        # $(warning * THIS IS DEPRECATED, AND WILL BE DISCONTINUED                *)
+        # $(warning * Please configure your device to download the kernel         *)
+        # $(warning * source repository to $(KERNEL_SRC))
+        # $(warning * See http://wiki.cyanogenmod.com/wiki/Integrated_kernel_building)
+        # $(warning * for more information                                        *)
+        # $(warning ***************************************************************)
         FULL_KERNEL_BUILD := false
         KERNEL_BIN := $(TARGET_PREBUILT_KERNEL)
     else
@@ -62,11 +62,11 @@ ifeq "$(wildcard $(KERNEL_SRC) )" ""
 else
     NEEDS_KERNEL_COPY := true
     ifeq ($(TARGET_KERNEL_CONFIG),)
-        $(warning **********************************************************)
-        $(warning * Kernel source found, but no configuration was defined  *)
-        $(warning * Please add the TARGET_KERNEL_CONFIG variable to your   *)
-        $(warning * BoardConfig.mk file                                    *)
-        $(warning **********************************************************)
+        # $(warning **********************************************************)
+        # $(warning * Kernel source found, but no configuration was defined  *)
+        # $(warning * Please add the TARGET_KERNEL_CONFIG variable to your   *)
+        # $(warning * BoardConfig.mk file                                    *)
+        # $(warning **********************************************************)
         # $(error "NO KERNEL CONFIG")
     else
         #$(info Kernel source found, building it)
