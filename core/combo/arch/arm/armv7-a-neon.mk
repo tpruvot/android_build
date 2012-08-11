@@ -8,13 +8,10 @@ ARCH_ARM_HAVE_HALFWORD_MULTIPLY := true
 ARCH_ARM_HAVE_CLZ               := true
 ARCH_ARM_HAVE_FFS               := true
 ARCH_ARM_HAVE_ARMV7A            := true
+ARCH_ARM_HAVE_TLS_REGISTER      := true
 ARCH_ARM_HAVE_VFP               := true
 ARCH_ARM_HAVE_VFP_D32           := true
 ARCH_ARM_HAVE_NEON              := true
-
-ifneq ($(TARGET_BOARD_PLATFORM),omap3)
-#   ARCH_ARM_HAVE_TLS_REGISTER  := true
-endif
 
 # Note: Hard coding the 'tune' value here is probably not ideal,
 # and a better solution should be found in the future.
