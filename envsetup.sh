@@ -704,15 +704,15 @@ function mmmp()
     PRODUCT=`echo $TARGET_PRODUCT | tr "_" "\n" | tail -n 1`
     OUTDIR=out/target/product/$PRODUCT
 
-    adb root > /dev/null
-    sleep 1
+    adb start-server
     adb remount > /dev/null
 
-    mmm $* | tee .log
+    # Strip the colors here
+    mmm $* | sed -r 's:\x1B\[[0-9;]*[mK]::g' | tee .log
 
     # Pull out built file locations from .log
-    # Install: <file> -- note we have to chop off the last 3 characters here (color tag)
-    LOC="$(cat .log | grep 'Install' | cut -d ':' -f 2 | awk '{print substr($0, 0, length($0)-3)}')"
+    # Install: <file>
+    LOC="$(cat .log | grep 'Install' | cut -d ':' -f 2)"
     # Copy: <file>
     LOC="$LOC $(cat .log | grep 'Copy' | cut -d ':' -f 2)"
 
@@ -724,11 +724,8 @@ function mmmp()
         if ! echo $TARGET | egrep '^system\/' > /dev/null ; then
             continue
         else
-            echo "Pushing: $TARGET"
-            adb push $FILE $TARGET &> .log
-            test $? || cat .log
-            adb shell chmod 777 $TARGET &> .log
-            test $? || cat .log
+            echo "Pushing: ${FILE} ${TARGET}"
+            $(which adb) push "${FILE}" "${TARGET}" | tee .log
         fi
     done
     rm -f .log
