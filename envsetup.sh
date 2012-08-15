@@ -667,14 +667,12 @@ function mmmp()
     sleep 1
     adb remount > /dev/null
 
-    # Credit for color strip sed: http://goo.gl/BoIcm
-    mmm $* | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | tee .log
+    mmm $* | tee .log
 
-    # Pull out built file locations from .log
     # Install: <file>
-    LOC="$(cat .log | grep 'Install' | cut -d ':' -f 2)"
+    LOC=$(cat .log | sed -r 's:\x1B\[[0-9;]*[mK]::g' | grep 'Install' | cut -d ':' -f 2)
     # Copy: <file>
-    LOC="$LOC $(cat .log | grep 'Copy' | cut -d ':' -f 2)"
+    LOC="$LOC $(cat .log | sed -r 's:\x1B\[[0-9;]*[mK]::g' | grep 'Copy' | cut -d ':' -f 2)"
 
     for FILE in $LOC; do
         # Get target file name (i.e. system/bin/adb)
@@ -685,8 +683,7 @@ function mmmp()
             continue
         else
             echo "Pushing: $TARGET"
-            adb push $FILE $TARGET &> .log
-            test $? || cat .log
+            adb push $FILE $TARGET
         fi
     done
     rm -f .log
